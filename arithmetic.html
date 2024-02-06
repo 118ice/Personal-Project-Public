@@ -85,9 +85,20 @@
             }
             document.getElementById("question-content").innerHTML = questionContent;
         }
-        fetch('https://d30a-94-175-25-142.ngrok-free.app')
-    .then(response => response.json())
+        fetch('https://b11c-94-175-25-142.ngrok-free.app', {
+      method: "get",
+      headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+      }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
+        // Access the fetched data and update the DOM
         document.getElementById('message').textContent = data.message;
     })
     .catch(error => console.error('Error fetching data:', error));
