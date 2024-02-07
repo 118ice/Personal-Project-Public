@@ -3,58 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maths Categories</title>
+    <title>Infinite Maths Questions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: row; /
         }
         
-        #category-list {
+        #QuestionTypeList {
             width: 200px;
             height: 100vh;
             overflow-y: scroll;
             border-right: 1px solid #ccc;
         }
         
-        #category-list ul {
+        #QuestionTypeList ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
         
-        #category-list li {
+        #QuestionTypeList li {
             padding: 10px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         
-        #category-list li:hover {
+        #QuestionTypeList li:hover {
             background-color: #f0f0f0;
         }
         
-        #category-area {
+        #MainArea {
+            flex-grow: 1;
             padding: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="category-list">
+    <div id="QuestionTypeList">
         <ul>
-            <li onclick="navigateToCategory('arithmetic')">Arithmetic</li>
-            <li onclick="navigateToCategory('algebra')">Algebra</li>
-            <li onclick="navigateToCategory('geometry')">Geometry</li>
+            <li onclick="navigateToQuestionType('Sets')">Sets</li>
+            <li onclick="navigateToQuestionType('Sets')">to be added</li>
+            <li onclick="navigateToQuestionType('Sets')">to be added</li>
             <!-- Add more categories as needed -->
         </ul>
     </div>
-    <div id="category-area">
-        <h1>Welcome to Maths Categories!</h1>
-        <p>Select a category from the list on the left.</p>
+    <div id="MainArea">
+        <h1>Welcome to infinite maths questions</h1>
+        <p>Select a question type from the list on the left.</p>
     </div>
 
     <script>
-        function navigateToCategory(category) {
+        function navigateToQuestionType(category) {
             window.location.href = category + ".html";
         }
     </script>

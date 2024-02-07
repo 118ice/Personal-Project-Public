@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: row; 
+        }
+        
+        #QuestionTypeList {
+            flex-shrink: 0;
+            width: 200px;
+            height: 100vh;
+            overflow-y: scroll;
+            border-right: 5px solid #4b8bcf;
+        }
+        
+        #QuestionTypeList ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        #QuestionTypeList li {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #QuestionTypeList li:hover {
+            background-color: #4b8bcf;
+        }
+        
+        #mainArea {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .title {
+            font-size: 60px;
+            margin-bottom: 10px;
+            align-self: flex-start; 
+        }
+
+        #seed,
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 3px;
+            width: 20%; 
+        }
+
+        #sets,
+        #question {
+            font-size: 40px; 
+            margin-bottom: 20px;
+        }
+
+        #buttonContainer {
+            display: flex;
+            align-items: center; 
+            margin-bottom: 10px;
+        }
+
+        .pretty-box {
+            position: fixed;
+            top: 20px; 
+            right: 20px; 
+            width: 200px; 
+            height: 30px; 
+            background-color: #ff0000; 
+            border: 2px solid #4b8bcf; 
+            border-radius: 10px; 
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .pretty-box p {
+            font-family: Arial, sans-serif;
+            color: #000000;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .up-down-button {
+            padding: 12px; 
+            font-size: 16px;
+            width: 100px; 
+            cursor: pointer;
+            border: none;
+            background-color: #4b8bcf;
+            color: rgb(255, 255, 255);
+            border-radius: 5px;
+        }
+
+        #textButton {
+    padding: 10px 20px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    color: #000000; 
+    background-color: transparent; 
+    transition: background-color 0.3s;
+    border: 2px solid #4b8bcf; 
+    border-radius: 5px; 
+    transition: background-color 0.3s, color 0.3s;}
+
+.text-button:hover {
+    background-color: #4b8bcf; 
+    color: rgb(26, 62, 71);
+
+}
+#wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #007bff, transparent);
+    animation: waveEffect 2s infinite;
+    opacity: 0;
+}
+
+@keyframes waveEffect {
+    0% {
+        opacity: 1;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+#inputContainer {
+    display: flex;
+}
+
+#inputContainer input[type="text"] {
+    width: 20%;
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+#setsQuestionsBox {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 300px; 
+    overflow-y: auto; 
+}
+
+#question {
+    position: absolute;
+    bottom: 20px; 
+    left: 20px; 
+}
+
+#seedContainer {
+    display: flex;
+    align-items: center;
+}
+
+#seed {
+    margin-right: 10px;
+}
+    </style>
+</head>
+<body>
+    <div id="QuestionTypeList">
+        <ul>
+            <li onclick="navigateToQuestionType('Sets')">Sets</li>
+            <li onclick="navigateToQuestionType('Sets')">to be added</li>
+            <li onclick="navigateToQuestionType('Sets')">to be added</li>
+            <!-- Add more categories as needed -->
+        </ul>
+    </div>
+    <div id="mainArea">
+        <!-- might add this later if can make look better <div id="wave"></div>-->
+        <div id="box" class="pretty-box">
+            <div>Server Status</div>
+            <div id="message">Server is down/ Can't connect</div>
+        </div>
+        <h1 class="title">Sets</h1>
+        <div id="buttonContainer">
+            <button type="button" class="up-down-button" onclick=GetDownQuestion()>▼</button>
+            <button type="button" class = "textButton" onclick=GetQuestion()>generate question</button>
+            <button type="button" class = "textButton" onclick=GetRandQuestion()>Random</button>
+            <button type="button" class="up-down-button" onclick=GetUpQuestion()>▲</button>
+        </div>
+        <div id="seedContainer">
+            <input id="seed" type="number" value="1">
+            <div>seed</div>
+        </div>
+        <div id="setsQuestionsBox">
+            <div id="sets"></div>
+            <div id="question"></div>
+        </div>
+        <div id="inputContainer">
+            <input type="text">
+            <button type="button" onclick="ShowAnswer()">Check Answer</button>
+        </div>
+        <div id="answer"></div>
+    </div>
+
+    <script>
+        const serverUrl = 'https://present-thankfully-crayfish.ngrok-free.app';
+        function GetUpQuestion(){
+            seed = document.getElementById("seed").value;
+            document.getElementById('seed').value = Number(seed)+1
+            GetQuestion()
+        }
+        function GetDownQuestion(){
+            seed = document.getElementById("seed").value;
+            document.getElementById('seed').value = seed-1
+            GetQuestion()
+        }
+        function GetRandQuestion(){
+            seed = document.getElementById("seed").value;
+            document.getElementById('seed').value = Math.floor(Math.random() * 10000);
+            GetQuestion()
+        }
+        function navigateToQuestionType(category) {
+            window.location.href = category + ".html";
+        }
+        function GetQuestion(){
+            seed = document.getElementById("seed").value;
+            title = document.querySelector(".title").textContent;
+            console.log(title);
+            dataToSend = {number: seed,};
+            try{
+                json.loads(dataToSend);}
+            catch{
+                console.log("failure")
+            }
+
+            fetch(serverUrl+"/"+title, {
+      method: "POST",
+      headers: {
+        "ngrok-skip-browser-warning": "31",
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend)
+    })
+    .then(response => {
+        console.log(" work")
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        
+        return response.json().then(errorData => {
+                // Throw an error with the parsed JSON response body
+                throw new Error(JSON.stringify(errorData));
+            });}
+        return response.json();})
+        .then(responseData => {
+    letters = ['A','B','C','D','E']
+    enumeratorSymbols = ['\u222A','\u2229','\u2216']
+    setsText = ""
+    questionText = ""
+    for (let i =0; i < responseData[0].numSets[0]; i++){
+        setsText = setsText + letters[i] + ' : {' + responseData[4].sets[i] + '}  '
+        if (i!= responseData[0].numSets[0]-1){
+        questionText = questionText + letters[i] + enumeratorSymbols[responseData[3].enumeratorTypesList[i]]
+        }
+        else{
+            questionText = questionText + letters[i]
+        }
+}
+    document.getElementById('answer').textContent = responseData[6].answer[0]
+    document.getElementById('sets').textContent = setsText
+    document.getElementById('question').textContent = questionText
+    console.log(responseData); // Logging the response data
+    console.log(typeof(responseData))
+})
+.catch(error => console.error('Error fetching data: ', error));}
+//end of GetQuestion
+//#############################
+    function ShowAnswer(){
+        document.getElementById('wave').style.opacity = '1';
+    }
+        fetch('https://present-thankfully-crayfish.ngrok-free.app', {
+      method: "GET",
+      headers: {
+        "ngrok-skip-browser-warning": "31",
+      },
+    })
+    .then(response => {
+        console.log(" work")
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("box").style.backgroundColor = "#77dd77";
+        document.getElementById('message').textContent = data.message;
+    })
+    .catch(error => console.error('Error fetching data:', error));
+    GetQuestion()
+    </script>
+</body>
+</html>
