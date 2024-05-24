@@ -255,25 +255,15 @@
             throw new Error('Network response was not ok');
         
         return response.json().then(errorData => {
-                // Throw an error with the parsed JSON response body
                 throw new Error(JSON.stringify(errorData));
             });}
         return response.json();})
         .then(responseData => {
-    letters = ['A','B','C','D','E']
+    letters = ['A','B','C','D']
     enumeratorSymbols = ['\u222A','\u2229','\u2216']
     setsText = ""
-    questionText = ""
-    for (let i =0; i < responseData[0].numSets[0]; i++){
-        setsText = setsText + letters[i] + ' : {' + responseData[4].sets[i] + '}  '
-        if (i!= responseData[0].numSets[0]-1){
-        questionText = questionText + letters[i] + enumeratorSymbols[responseData[3].enumeratorTypesList[i]]
-        }
-        else{
-            questionText = questionText + letters[i]
-        }
-}
-    document.getElementById('answer').textContent = responseData[6].answer[0]
+    questionText = responseData[5].question
+    document.getElementById('answer').textContent = responseData[4].answer
     document.getElementById('sets').textContent = setsText
     document.getElementById('question').textContent = questionText
     console.log(responseData); // Logging the response data
